@@ -5,7 +5,7 @@ import google.generativeai as genai
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 
 # Chọn model
-model = genai.GenerativeModel("gemini-2.0-flash")
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 st.set_page_config(page_title="SmartStudy AI")
 
@@ -41,4 +41,5 @@ Nội dung: {user_input}
                 st.error(f"Lỗi: {e}")
     else:
         st.warning("Vui lòng nhập nội dung!")
+
 
