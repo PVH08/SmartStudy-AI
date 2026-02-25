@@ -9,7 +9,7 @@ except Exception:
     st.stop()
 
 # Load model
-model = genai.GenerativeModel("gemini-pro")
+model = genai.GenerativeModel("gemini-2.0-flash")
 
 # UI
 st.set_page_config(page_title="SmartStudy AI", page_icon="🎓")
@@ -51,6 +51,7 @@ Nội dung: {user_input}
 
             except Exception as e:
                 st.error(f"❌ Lỗi hệ thống: {e}")
+
 
 
 
