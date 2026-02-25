@@ -1,38 +1,41 @@
 import streamlit as st
-from openai import OpenAI
+import google.generativeai as genai
 
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+# ====== API KEY ======
+genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+# ====== UI ======
 st.set_page_config(page_title="SmartStudy AI")
 
 st.title("🎓 SmartStudy AI")
-st.write("Trợ lý học tập cá nhân hóa cho học sinh")
+st.write("Trợ lý học tập cá nhân hóa cho học sinh (Gemini)")
 
+# ====== INPUT ======
 user_input = st.text_area("Nhập nội dung cần học:")
 
+# ====== XỬ LÝ ======
 if st.button("Phân tích"):
     if user_input:
         with st.spinner("Đang xử lý..."):
             try:
-                response = client.chat.completions.create(
-                    model="gpt-4o-mini",
-                    messages=[
-                        {
-                            "role": "system",
-                            "content": """Bạn là SmartStudy AI.
+                prompt = f"""
+Bạn là SmartStudy AI.
 
 Hãy trả lời theo cấu trúc:
 1. Giải thích
 2. Tóm tắt
 3. Câu hỏi trắc nghiệm (có đáp án)
 4. Gợi ý học
-"""
-                        },
-                        {"role": "user", "content": user_input}
-                    ]
-                )
 
-                result = response.choices[0].message.content
+Nội dung: {user_input}
+"""
+
+                response = model.generate_content(prompt)
+
+                result = response.text
+
                 st.success("Kết quả:")
                 st.write(result)
 
