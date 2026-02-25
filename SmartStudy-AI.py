@@ -16,7 +16,7 @@ if st.button("Phân tích"):
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
-                    {"role": "system", "content": """
+                    {"role": "system", "content": """}
 Bạn là SmartStudy AI.
 
 Hãy trả lời theo cấu trúc:
@@ -33,4 +33,5 @@ Hãy trả lời theo cấu trúc:
             result = response.choices[0].message.content
 
             st.write(result)
+
 
