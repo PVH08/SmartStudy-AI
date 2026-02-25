@@ -1,30 +1,22 @@
 import streamlit as st
 import google.generativeai as genai
 
-# Cấu hình API KEY
-try:
-    genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-except Exception:
-    st.error("❌ Chưa cấu hình GEMINI_API_KEY trong secrets.toml")
-    st.stop()
+# Lấy API key từ secrets
+genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 
-# Load model
+# Chọn model
 model = genai.GenerativeModel("gemini-2.5-flash")
 
-# UI
-st.set_page_config(page_title="SmartStudy AI", page_icon="🎓")
+st.set_page_config(page_title="SmartStudy AI")
+
 st.title("🎓 SmartStudy AI")
-st.caption("Trợ lý học tập cá nhân hóa cho học sinh")
+st.write("Trợ lý học tập cá nhân hóa cho học sinh")
 
-# Input
-user_input = st.text_area("📚 Nhập nội dung cần học:", height=150)
+user_input = st.text_area("Nhập nội dung cần học:")
 
-# Button
-if st.button("🚀 Phân tích"):
-    if not user_input.strip():
-        st.warning("⚠️ Vui lòng nhập nội dung!")
-    else:
-        with st.spinner("⏳ Đang xử lý..."):
+if st.button("Phân tích"):
+    if user_input.strip():
+        with st.spinner("Đang xử lý..."):
             try:
                 prompt = f"""
 Bạn là SmartStudy AI.
@@ -42,17 +34,10 @@ Nội dung: {user_input}
 
                 response = model.generate_content(prompt)
 
-                # 🔥 FIX lỗi Gemini trả về None
-                if not response.text:
-                    st.error("❌ Không nhận được phản hồi từ AI")
-                else:
-                    st.success("✅ Kết quả:")
-                    st.markdown(response.text)
+                st.success("Kết quả:")
+                st.markdown(response.text)
 
             except Exception as e:
-                st.error(f"❌ Lỗi hệ thống: {e}")
-
-
-
-
-
+                st.error(f"Lỗi: {e}")
+    else:
+        st.warning("Vui lòng nhập nội dung!")
